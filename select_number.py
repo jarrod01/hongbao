@@ -1,29 +1,50 @@
 import random
-import matplotlib.pyplot as plt
 import numpy as np
 
-def count_select(people, money):
-    counts = []
+def hongbao_select(people, money, minimal=0.01):
+    hongbaos = []
+    money -= people * minimal
+    if money == 0:
+        return [minimal]*people
+    elif money < 0:
+        return []
     for i in range(people):
-        average = money / (people - i + 1)
-        tmp_count = random.randrange(1, int(average*200), 1)
+        average = money / (people - i)
+        tmp_count = random.randrange(0, int(average*200), 1)
         tmp_count /= 100
-        counts.append(tmp_count)
+        hongbaos.append(tmp_count)
         money -= tmp_count
-    return counts
+    hongbaos = [i + minimal for i in hongbaos]
+    return hongbaos
+
+def result_analysis(hongbaos):
+    hongbao_array = np.array(hongbaos)
+    print('瓜分总金额：' + str(hongbao_array.sum()))
+    print('最小值：' + str(hongbao_array.min()))
+    print('最大值：' + str(hongbao_array.max()))
+    print('平均值：' + str(hongbao_array.mean()))
+    print('方差：' + str(hongbao_array.var()))
+    print('标准差：' + str(hongbao_array.std()))
+
 
 if __name__ == '__main__':
-    people = 5000
-    money = 1000
-    counts = count_select(people, money)
-    nums = list(set(counts))
-    nums.sort()
-    nums_count = []
-    for num in nums:
-        nums_count.append(counts.count(num))
-    print('mean: ' + str(sum(counts)/people))
-    plt.title('各红包值的次数')
-    plt.xlabel('红包值')
-    plt.ylabel('次数')
-    plt.plot(nums, nums_count)
-    plt.show()
+    people = int(input('请输入人数：'))
+    money = float(input('请输入总金额：'))
+    minimal = float(input('请输入每人最小金额：'))
+    hongbaos = hongbao_select(people, money, minimal)
+    if hongbaos:
+        result_analysis(hongbaos)
+    else:
+        print('输入有误，钱不够分的！')
+    # counts = 0
+    # for i in range(10000):
+    #     people = random.randint(20, 60)
+    #     average = random.randint(50, 200)/100
+    #     money = people * average
+    #     minimal = 0.5
+    #     hongbaos = hongbao_select(people, money, minimal)
+    #     if hongbaos:
+    #         hongbao_array = np.array(hongbaos)
+    #         if hongbao_array.max() >= average*2:
+    #             counts += 1
+    # print(counts)
