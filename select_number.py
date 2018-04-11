@@ -17,6 +17,7 @@ def hongbao_select(people, money, minimal=0.01):
     hongbaos = [i + minimal for i in hongbaos]
     return hongbaos
 
+
 def result_analysis(hongbaos):
     hongbao_array = np.array(hongbaos)
     print('瓜分总金额：' + str(hongbao_array.sum()))
